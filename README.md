@@ -196,6 +196,24 @@ mvn deploy
 # Bump to the next SNAPSHOT version
 ```
 
+## Pushing to Exoscale
+
+Assuming leiningen, the configuration would be:
+
+```clojure
+:repositories [["private" {:url "s3p://some-bucket/some-prefix" :no-auth true}]]
+```
+
+
+You'll then need a correct configuration in `~/.aws/credentials`, assuming
+you have a configuration in your `artifacts` profile in `~/.aws/credentials`, you can then:
+
+```bash
+env AWS_PROFILE=artifacts AWS_DEFAULT_REGION=ch-dk-2 lein deploy private
+```
+
+
+
 ## License
 
 Copyright © 2011-2013 Phil Hagelberg, Scott Clasen, Allen Rohner
@@ -207,3 +225,4 @@ Distributed under the Apache Public License version 2.0.
 
 [chained-provider-class]: http://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/auth/DefaultAWSCredentialsProviderChain.html
 [credentials-file-format]: http://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html#aws-credentials-file-format
+
