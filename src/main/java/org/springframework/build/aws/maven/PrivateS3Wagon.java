@@ -109,41 +109,24 @@ public final class PrivateS3Wagon extends AbstractWagon {
                 defaultCredProvider = true;
             }
 
-            if (defaultCredProvider) {
-                this.amazonS3 = new AmazonS3Client(new DefaultAWSCredentialsProviderChain(), clientConfiguration);
-            } else {
-                AWSCredentials awsCredentials = new AuthenticationInfoAWSCredentials(authenticationInfo);
-                this.amazonS3 = new AmazonS3Client(awsCredentials, clientConfiguration);
-            }
-
-            try {
-                com.amazonaws.regions.Region region = parseRegion(new DefaultAwsRegionProviderChain().getRegion());
-                if (!region.getPartition().equals("aws")) {
-                    this.amazonS3.setRegion(region);
-                } else {
-                    detectEndpointFromBucket();
-                }
-            } catch (AmazonClientException e) {
-                detectEndpointFromBucket();
-            }
+            this.amazonS3 = new AmazonS3Client(new DefaultAWSCredentialsProviderChain(), clientConfiguration);
+            detectEndpointFromBucket();
         }
     }
 
     private void detectEndpointFromBucket() {
-        String location = this.amazonS3.getBucketLocation(this.bucketName);
-
-        try {
-            Region region = Region.fromLocationConstraint(this.amazonS3.getBucketLocation(this.bucketName));
-            this.amazonS3.setEndpoint(region.getEndpoint());
-        } catch (IllegalArgumentException e) {
-            this.amazonS3.setRegion(parseRegion(location));
-        }
+        this.amazonS3.setRegion(parseRegion("ch-dk-2"));
     }
 
     private com.amazonaws.regions.Region parseRegion(String region) {
-        return com.amazonaws.regions.Region.getRegion(Regions.fromName(region));
+        com.amazonaws.regions.InMemoryRegionImpl ri = new com.amazonaws.regions.InMemoryRegionImpl("ch-dk-2", "sos-ch-dk-2.exo.io");
+
+        ri.addEndpoint("s3", "sos-ch-dk-2.exo.io");
+        ri.addHttps("s3");
+        ri.addHttp("s3");
+        return new com.amazonaws.regions.Region(ri);
     }
-    
+
     @Override
     protected void disconnectFromRepository() {
         this.amazonS3 = null;
