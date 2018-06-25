@@ -1,11 +1,11 @@
-# s3-wagon-private
+# sos-wagon-private
 
 Deploy and consume artifacts in private S3 repositories. Designed to
 be used from [Leiningen](https://github.com/technomancy/leiningen),
 but should be usable in other contexts by deploying to repositories at
 "s3p://" URLs.
 
-> **Note: If this is all too much hassle for you, take a look at [Deps](https://www.deps.co), a simple, private, native Maven repository service that the maintainer also runs.**
+> **Note: This is a derived version of https://github.com/s3-wagon-private/s3-wagon-private**
 
 ## Usage
 
@@ -16,7 +16,7 @@ Add the plugin and repositories listing to `project.clj`.
 **NB: You need to add these to your `project.clj`, not your personal `~/.lein/profiles.clj`. For more details on why, see Leiningen's doc on [repeatability](https://github.com/technomancy/leiningen/wiki/Repeatability#user-level-repositories)**:
 
 ```clj
-:plugins [[s3-wagon-private "1.3.1"]]
+:plugins [[exoscale/sos-wagon-private "1.3.2-exoscale8"]]
 ```
 
 To authenticate to the S3 bucket, you can either use any of the AWS SDK credential providers, store credentials in an encrypted file, or store your credentials in arbitrary environment variables.
